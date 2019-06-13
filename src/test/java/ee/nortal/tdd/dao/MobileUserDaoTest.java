@@ -9,8 +9,7 @@ import org.junit.Test;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 
 import static ee.nortal.tdd.TestDatabase.addUser;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 public class MobileUserDaoTest {
 
@@ -36,17 +35,24 @@ public class MobileUserDaoTest {
 
   @Test
   public void findUser() {
-    addUser("John Matrix", "301020304050601");
+    addUser("John Matrix", "301020304050601", true);
     MobileUser user = mobileUserDao.findUser("301020304050601");
     assertNotNull(user);
     assertEquals("John Matrix", user.getFullName());
   }
 
   @Test
-  @Ignore
   public void findExistingUser() {
     MobileUser user = mobileUserDao.findUser("4020203040992582");
     assertNotNull(user);
     assertEquals("Natalie Jones", user.getFullName());
+  }
+
+  @Test
+  public void findInActiveUser() {
+    addUser("John Smith", "34567i65345623", false);
+    MobileUser user = mobileUserDao.findUser("34567i65345623");
+    assertNotNull(user);
+    assertFalse(user.isActive());
   }
 }

@@ -24,7 +24,7 @@ public class SignatureCreatorTest {
 
   @Test
   public void createSignature() {
-    mockUser("John Matrix", "301020304050601");
+    mockUser("John Matrix", "301020304050601", true);
     MobileSignature signature = createSignature("301020304050601", "Hello World Document!");
     assertValidMobileSignature(signature, "John Matrix", "SGVsbG8gV29ybGQgRG9jdW1lbnQh");
   }
@@ -36,21 +36,18 @@ public class SignatureCreatorTest {
   }
 
   @Test(expected = InvalidDocumentException.class)
-  @Ignore
   public void createSignature_withoutDocument_shouldThrowException() {
-    mockUser("John Matrix", "301020304050601");
+    mockUser("John Matrix", "301020304050601", true);
     createSignature("301020304050601", null);
   }
 
   @Test(expected = InvalidDocumentException.class)
-  @Ignore
   public void createSignature_withEmptyDocument_shouldThrowException() {
-    mockUser("John Matrix", "301020304050601");
+    mockUser("John Matrix", "301020304050601", true);
     createSignature("301020304050601", "");
   }
 
   @Test(expected = UserNotFoundException.class)
-  @Ignore
   public void createSignature_withoutUser_shouldThrowException() {
     createSignature(null, "Hello world");
   }
@@ -62,9 +59,10 @@ public class SignatureCreatorTest {
     return signatureCreator.createSignature(request);
   }
 
-  private void mockUser(String fullName, String personIdCode) {
+  private void mockUser(String fullName, String personIdCode, boolean isActive) {
     MobileUser user = new MobileUser();
     user.setFullName(fullName);
+    user.setActive(isActive);
     when(mobileUserDao.findUser(personIdCode)).thenReturn(user);
   }
 

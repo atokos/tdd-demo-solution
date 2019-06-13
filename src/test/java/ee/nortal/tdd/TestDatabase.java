@@ -33,19 +33,20 @@ public class TestDatabase {
     return embeddedDatabase;
   }
 
-  public static void addUser(String name, String idCode) {
+  public static void addUser(String name, String idCode, boolean isActive) {
     MapSqlParameterSource params = new MapSqlParameterSource();
     params.addValue("PERSON_ID_CODE", idCode);
     params.addValue("FULL_NAME", name);
+    params.addValue("IS_ACTIVE", isActive);
     userInsert.execute(params);
   }
 
   private static void generateTestData() {
-    addUser("Natalie Jones", "4020203040992582");
-    addUser("Ben Richards", "301020304023592");
-    addUser("Mikaela Banes", "423020304023592");
-    addUser("Julius Benedict", "301020304012053");
-    addUser("Jack Slater", "3010203040954124");
-    addUser("Harry Tasker", "3010203040992582");
+    addUser("Natalie Jones", "4020203040992582", true);
+    addUser("Ben Richards", "301020304023592", true);
+    addUser("Mikaela Banes", "423020304023592", true);
+    addUser("Julius Benedict", "301020304012053", true);
+    addUser("Jack Slater", "3010203040954124", true);
+    addUser("Harry Tasker", "3010203040992582", false);
   }
 }

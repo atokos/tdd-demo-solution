@@ -37,7 +37,7 @@ public class SignatureTest {
 
   @Test
   public void createSignature() {
-    addUser("John Matrix", "301020304050601");
+    addUser("John Matrix", "301020304050601", true);
     given()
       .port(port)
       .contentType(ContentType.JSON)
@@ -71,7 +71,6 @@ public class SignatureTest {
   }
 
   @Test
-  @Ignore
   public void createSignature_withoutDocument_shouldReturnError() {
     given()
       .port(port)
@@ -85,6 +84,23 @@ public class SignatureTest {
       .contentType(ContentType.JSON)
       .body("errorCode", equalTo("INVALID_DOCUMENT"))
       .log().everything();
+
+  }
+
+  @Test
+  public void createSignature_whenUserNotActive_shouldReturnError() {
+    given()
+            .port(port)
+            .contentType(ContentType.JSON)
+            .body(readFileBody("invalid-user-signature-request-user-not-active.json"))
+            .log().everything()
+            .when()
+            .post("/signature/create")
+            .then()
+            .statusCode(400)
+            .contentType(ContentType.JSON)
+            .body("errorCode", equalTo("USER_NOT_ACTIVE"))
+            .log().everything();
 
   }
 }

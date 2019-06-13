@@ -1,9 +1,6 @@
 package ee.nortal.tdd.controller;
 
-import ee.nortal.tdd.signature.MobileSignature;
-import ee.nortal.tdd.signature.SignatureCreator;
-import ee.nortal.tdd.signature.SignatureRequest;
-import ee.nortal.tdd.signature.UserNotFoundException;
+import ee.nortal.tdd.signature.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +22,18 @@ public class SignatureController {
   @ResponseStatus(value = HttpStatus.BAD_REQUEST)
   public ErrorResponse handleUserNotFound() {
     return new ErrorResponse("USER_NOT_FOUND");
+  }
+
+  @ExceptionHandler(InvalidDocumentException.class)
+  @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+  public ErrorResponse handleInvalidDocument() {
+    return new ErrorResponse("INVALID_DOCUMENT");
+  }
+
+  @ExceptionHandler(UserNotActiveException.class)
+  @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+  public ErrorResponse handleUserNotActive() {
+    return new ErrorResponse("USER_NOT_ACTIVE");
   }
 
 }
